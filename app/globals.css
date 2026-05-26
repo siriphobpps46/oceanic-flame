@@ -1,0 +1,116 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-anuphan), var(--font-geist-sans), sans-serif;
+  --font-mono: var(--font-geist-mono);
+  
+  /* Premium Palette Colors */
+  --color-navy-50: #f0f4f8;
+  --color-navy-100: #dbe4ef;
+  --color-navy-200: #bdcedf;
+  --color-navy-300: #91aecb;
+  --color-navy-400: #5f89b2;
+  --color-navy-500: #3e6a98;
+  --color-navy-600: #30537a;
+  --color-navy-700: #284464;
+  --color-navy-800: #1a2c42;
+  --color-navy-850: #142235;
+  --color-navy-900: #0f1a28;
+  --color-navy-950: #0a111a;
+  
+  --color-coral-50: #fff5f2;
+  --color-coral-100: #ffe8e2;
+  --color-coral-200: #ffd1c4;
+  --color-coral-300: #ffa893;
+  --color-coral-400: #ff7253;
+  --color-coral-500: #ff5a36;
+  --color-coral-600: #ea431f;
+  --color-coral-700: #c53213;
+  --color-coral-800: #a32b13;
+  --color-coral-900: #872814;
+}
+
+.dark {
+  --background: #0f172a;
+  --foreground: #f8fafc;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-anuphan), var(--font-geist-sans), sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar for premium look */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.1);
+  border-radius: 8px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(248, 250, 252, 0.1);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 90, 54, 0.4);
+}
+
+/* Custom premium transitions and glassmorphism classes */
+.premium-glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.dark .premium-glass {
+  background: rgba(30, 41, 59, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Keyframe Animations */
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.25s ease-out forwards;
+}
+
