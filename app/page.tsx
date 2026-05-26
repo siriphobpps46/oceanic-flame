@@ -4,10 +4,12 @@ import React, { useState, useEffect } from "react";
 import DashboardView from "./components/DashboardView";
 import TransactionForm from "./components/TransactionForm";
 import HistoryView from "./components/HistoryView";
+import CalendarView from "./components/CalendarView";
 import BudgetView from "./components/BudgetView";
 import { 
   DashboardIcon, 
   HistoryIcon, 
+  CalendarIcon,
   BudgetIcon, 
   PlusIcon, 
   LightThemeIcon, 
@@ -60,12 +62,13 @@ const INITIAL_CATEGORIES: Category[] = [
 
 export default function Home() {
   const [isMounted, setIsMounted] = useState(false);
-  const [activeTab, setActiveTab] = useState<"dashboard" | "history" | "budget">("dashboard");
+  const [activeTab, setActiveTab] = useState<"dashboard" | "history" | "calendar" | "budget">("dashboard");
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [budget, setBudget] = useState<Budget>({ monthlyLimit: 0 });
   const [categories] = useState<Category[]>(INITIAL_CATEGORIES);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editTransaction, setEditTransaction] = useState<Transaction | null>(null);
+  const [formDefaultDate, setFormDefaultDate] = useState<string | undefined>(undefined);
   const [theme, setTheme] = useState<"light" | "dark">("light");
 
   // 1. Initial mounting checks (Prevents Hydration Errors)
@@ -307,7 +310,10 @@ export default function Home() {
             transactions={transactions}
             categories={categories}
             budget={budget}
-            onAddTransactionClick={() => setIsFormOpen(true)}
+            onAddTransactionClick={() => {
+              setFormDefaultDate(undefined);
+              setIsFormOpen(true);
+            }}
           />
         )}
 
@@ -318,6 +324,21 @@ export default function Home() {
             onEdit={handleTriggerEdit}
             onDelete={handleDeleteTransaction}
             onDuplicate={handleDuplicateTransaction}
+          />
+        )}
+
+        {activeTab === "calendar" && (
+          <CalendarView
+            transactions={transactions}
+            categories={categories}
+            onEdit={handleTriggerEdit}
+            onDelete={handleDeleteTransaction}
+            onDuplicate={handleDuplicateTransaction}
+            onAddTransactionClick={(customDate) => {
+              setFormDefaultDate(customDate);
+              setEditTransaction(null);
+              setIsFormOpen(true);
+            }}
           />
         )}
 
@@ -339,6 +360,7 @@ export default function Home() {
         <button
           onClick={() => {
             setEditTransaction(null);
+            setFormDefaultDate(undefined);
             setIsFormOpen(true);
           }}
           className="p-4 bg-coral-500 hover:bg-coral-600 text-white rounded-full shadow-lg shadow-coral-500/25 hover:shadow-xl transition-all duration-300 hover:scale-105 group"
@@ -348,7 +370,7 @@ export default function Home() {
         </button>
       </div>
 
-      {/* 4. Bottom Tab Bar Navigation (Symmetrical 3-tab menu for all screen sizes) */}
+      {/* 4. Bottom Tab Bar Navigation (Symmetrical 4-tab menu for all screen sizes) */}
       <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-navy-900/95 backdrop-blur-md border-t border-slate-100 dark:border-navy-850 px-4 py-2.5 flex items-center justify-around shadow-2xl">
         
         {/* Tab 1: Dashboard */}
@@ -377,7 +399,20 @@ export default function Home() {
           <span className="text-[10px]">ประวัติ</span>
         </button>
 
-        {/* Tab 3: Budget & Settings */}
+        {/* Tab 3: Calendar */}
+        <button
+          onClick={() => setActiveTab("calendar")}
+          className={`flex flex-col items-center gap-1 py-1.5 px-3 rounded-2xl transition-all ${
+            activeTab === "calendar"
+              ? "text-coral-500 font-bold"
+              : "text-slate-400 dark:text-navy-500 hover:text-slate-600 dark:hover:text-navy-300"
+          }`}
+        >
+          <CalendarIcon size={20} className={activeTab === "calendar" ? "stroke-[2.5]" : ""} />
+          <span className="text-[10px]">ปฏิทิน</span>
+        </button>
+
+        {/* Tab 4: Budget & Settings */}
         <button
           onClick={() => setActiveTab("budget")}
           className={`flex flex-col items-center gap-1 py-1.5 px-3 rounded-2xl transition-all ${
@@ -398,10 +433,12 @@ export default function Home() {
         onClose={() => {
           setIsFormOpen(false);
           setEditTransaction(null);
+          setFormDefaultDate(undefined);
         }}
         onSave={handleSaveTransaction}
         categories={categories}
         editTransaction={editTransaction}
+        defaultDate={formDefaultDate}
       />
 
     </div>
