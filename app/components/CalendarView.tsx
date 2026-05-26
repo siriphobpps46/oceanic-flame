@@ -357,21 +357,24 @@ export default function CalendarView({
                       {isIncome ? "+" : "-"}฿{tx.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
                     
-                    <div className="flex gap-0.5">
+                    <div className="flex gap-2">
+                      {/* Duplicate */}
                       <button
                         onClick={() => onDuplicate(tx)}
                         title="คัดลอกรายการ"
-                        className="p-1.5 text-slate-400 dark:text-navy-500 hover:text-navy-600 dark:hover:text-navy-300 hover:bg-slate-50 dark:hover:bg-navy-850 rounded-lg transition-colors"
+                        className="p-2.5 bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/30 dark:hover:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-sm border border-blue-100/50 dark:border-blue-900/30 flex items-center justify-center cursor-pointer"
                       >
-                        <DuplicateIcon size={13} />
+                        <DuplicateIcon size={16} />
                       </button>
+                      {/* Edit */}
                       <button
                         onClick={() => onEdit(tx)}
                         title="แก้ไขรายการ"
-                        className="p-1.5 text-slate-400 dark:text-navy-500 hover:text-navy-600 dark:hover:text-navy-300 hover:bg-slate-50 dark:hover:bg-navy-850 rounded-lg transition-colors"
+                        className="p-2.5 bg-slate-50 hover:bg-slate-100 dark:bg-navy-800 dark:hover:bg-navy-750 text-slate-600 dark:text-navy-200 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-sm border border-slate-100 dark:border-navy-700/30 flex items-center justify-center cursor-pointer"
                       >
-                        <EditIcon size={13} />
+                        <EditIcon size={16} />
                       </button>
+                      {/* Delete */}
                       <button
                         onClick={() => {
                           if (confirm("คุณแน่ใจหรือไม่ที่จะลบรายการบันทึกนี้?")) {
@@ -379,9 +382,9 @@ export default function CalendarView({
                           }
                         }}
                         title="ลบรายการ"
-                        className="p-1.5 text-slate-400 dark:text-navy-500 hover:text-coral-500 hover:bg-slate-50 dark:hover:bg-navy-850 rounded-lg transition-colors"
+                        className="p-2.5 bg-coral-50 hover:bg-coral-100 dark:bg-coral-950/30 dark:hover:bg-coral-900/40 text-coral-500 dark:text-coral-400 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-sm border border-coral-100 dark:border-coral-900/30 flex items-center justify-center cursor-pointer"
                       >
-                        <TrashIcon size={13} />
+                        <TrashIcon size={16} />
                       </button>
                     </div>
                   </div>
