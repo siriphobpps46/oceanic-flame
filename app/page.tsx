@@ -192,15 +192,15 @@ export default function Home() {
     // Premium startup loading progress emulation
     let currentProgress = 0;
     const interval = setInterval(() => {
-      currentProgress += 1;
+      currentProgress += 5;
       setLoadingProgress(currentProgress);
       if (currentProgress >= 100) {
         clearInterval(interval);
         setTimeout(() => {
           setIsLoading(false);
-        }, 250); // short delay for visual completion smoothness
+        }, 300); // short delay for visual completion smoothness
       }
-    }, 16); // 16ms * 100 = 1600ms total boot time!
+    }, 80); // 80ms * 20 = 1600ms total boot time!
 
     return () => {
       clearInterval(interval);
@@ -339,7 +339,7 @@ export default function Home() {
             <div className="w-full h-1.5 bg-slate-200 dark:bg-navy-900 rounded-full overflow-hidden border border-slate-100 dark:border-navy-800/40">
               {/* Inner progress bar */}
               <div 
-                className="h-full bg-gradient-to-r from-coral-500 to-coral-400 rounded-full transition-all duration-75 ease-out shadow-sm shadow-coral-500/20"
+                className="h-full bg-gradient-to-r from-coral-500 to-coral-400 rounded-full transition-all duration-[80ms] ease-linear shadow-sm shadow-coral-500/20"
                 style={{ width: `${loadingProgress}%` }}
               />
             </div>
