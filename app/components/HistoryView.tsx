@@ -286,7 +286,7 @@ export default function HistoryView({
                   </span>
                   
                   {/* Daily Sum details */}
-                  <div className="flex gap-3 text-[10px] font-bold text-slate-400 dark:text-navy-400">
+                  <div className="flex gap-3 text-xs font-bold text-slate-400 dark:text-navy-400">
                     {group.incomeTotal > 0 && (
                       <span className="text-emerald-600 dark:text-emerald-400">
                         รับ: +฿{group.incomeTotal.toLocaleString(undefined, { maximumFractionDigits: 2 })}
@@ -371,11 +371,7 @@ export default function HistoryView({
                             </button>
                             {/* Delete */}
                             <button
-                              onClick={() => {
-                                if (confirm("คุณแน่ใจหรือไม่ที่จะลบรายการบันทึกนี้?")) {
-                                  onDelete(tx.id);
-                                }
-                              }}
+                              onClick={() => onDelete(tx.id)}
                               title="ลบรายการ"
                               className="p-2.5 bg-coral-50 hover:bg-coral-100 dark:bg-coral-950/30 dark:hover:bg-coral-900/40 text-coral-500 dark:text-coral-400 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-sm border border-coral-100 dark:border-coral-900/30 flex items-center justify-center cursor-pointer"
                             >

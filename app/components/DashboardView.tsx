@@ -437,15 +437,15 @@ export default function DashboardView({
                       <span className="p-1 rounded bg-slate-100 dark:bg-navy-800 text-slate-600 dark:text-navy-300">
                         {getCategoryIcon(slice.icon, { size: 12 })}
                       </span>
-                      <span className="text-xs font-semibold text-slate-700 dark:text-navy-300 truncate max-w-[80px]">
+                      <span className="text-sm font-semibold text-slate-700 dark:text-navy-300 truncate max-w-[100px]">
                         {slice.label}
                       </span>
                     </div>
                     <div className="text-right flex flex-col">
-                      <span className="text-xs font-bold text-slate-800 dark:text-white">
+                      <span className="text-sm font-bold text-slate-800 dark:text-white">
                         ฿{slice.amount.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                       </span>
-                      <span className="text-[9px] font-semibold text-slate-400 dark:text-navy-500">
+                      <span className="text-[10px] font-semibold text-slate-400 dark:text-navy-500">
                         {slice.percentage.toFixed(1)}%
                       </span>
                     </div>

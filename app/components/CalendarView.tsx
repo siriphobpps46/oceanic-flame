@@ -221,7 +221,7 @@ export default function CalendarView({
 
                 {/* Financial Summary Badges inside day cells */}
                 {cell.dayNum && hasData && (
-                  <div className="flex flex-col w-full text-[8px] leading-tight select-none">
+                  <div className="flex flex-col w-full text-[9px] leading-tight select-none">
                     
                     {/* Desktop Amounts */}
                     {hasData.income > 0 && (
@@ -275,9 +275,8 @@ export default function CalendarView({
                 year: "numeric",
               })}
             </h4>
-            
             {/* Daily sums */}
-            <div className="flex gap-3 text-[10px] font-bold text-slate-400 dark:text-navy-400 mt-1">
+            <div className="flex gap-3 text-xs font-bold text-slate-400 dark:text-navy-400 mt-1">
               {selectedDayTotals.income > 0 && (
                 <span className="text-emerald-600 dark:text-emerald-400">
                   รับ: +฿{selectedDayTotals.income.toLocaleString()}
@@ -330,32 +329,34 @@ export default function CalendarView({
               return (
                 <div 
                   key={tx.id} 
-                  className="flex flex-col sm:flex-row sm:items-center justify-between py-3 gap-2.5 hover:bg-slate-50/50 dark:hover:bg-navy-800/20 px-2 rounded-xl transition-colors"
+                  className="flex flex-col sm:flex-row sm:items-center justify-between p-4 gap-3 hover:bg-slate-50/50 dark:hover:bg-navy-800/20 transition-all group"
                 >
                   <div className="flex items-center gap-3">
                     <div 
-                      className="p-2 rounded-xl flex items-center justify-center text-white flex-shrink-0"
+                      className="p-2.5 rounded-2xl flex items-center justify-center text-white flex-shrink-0"
                       style={{ backgroundColor: categoryObj.color }}
                     >
-                      {getCategoryIcon(categoryObj.icon, { size: 16 })}
+                      {getCategoryIcon(categoryObj.icon, { size: 18 })}
                     </div>
                     <div>
-                      <p className="text-xs font-bold text-slate-800 dark:text-white leading-tight">
+                      <p className="text-sm font-bold text-slate-800 dark:text-white leading-tight">
                         {tx.note || categoryObj.label}
                       </p>
-                      <p className="text-[9px] text-slate-400 dark:text-navy-500 font-semibold mt-0.5">
+                      <p className="text-[10px] text-slate-400 dark:text-navy-500 font-semibold mt-0.5">
                         {categoryObj.label}
                       </p>
                     </div>
                   </div>
 
                   {/* Actions & sums */}
-                  <div className="flex items-center justify-between sm:justify-end gap-4 pt-1 sm:pt-0 border-t sm:border-t-0 border-dashed border-slate-100 dark:border-navy-800/40">
-                    <span className={`text-xs font-extrabold ${
-                      isIncome ? "text-emerald-600 dark:text-emerald-400" : "text-coral-500 dark:text-coral-400"
-                    }`}>
-                      {isIncome ? "+" : "-"}฿{tx.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                    </span>
+                  <div className="flex sm:flex-row items-center justify-between sm:justify-end gap-4 border-t sm:border-t-0 border-dashed border-slate-100 dark:border-navy-800 pt-2 sm:pt-0">
+                    <div className="text-left sm:text-right">
+                      <span className={`text-sm font-extrabold ${
+                        isIncome ? "text-emerald-600 dark:text-emerald-400" : "text-coral-500 dark:text-coral-400"
+                      }`}>
+                        {isIncome ? "+" : "-"}฿{tx.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      </span>
+                    </div>
                     
                     <div className="flex gap-2">
                       {/* Duplicate */}
@@ -376,11 +377,7 @@ export default function CalendarView({
                       </button>
                       {/* Delete */}
                       <button
-                        onClick={() => {
-                          if (confirm("คุณแน่ใจหรือไม่ที่จะลบรายการบันทึกนี้?")) {
-                            onDelete(tx.id);
-                          }
-                        }}
+                        onClick={() => onDelete(tx.id)}
                         title="ลบรายการ"
                         className="p-2.5 bg-coral-50 hover:bg-coral-100 dark:bg-coral-950/30 dark:hover:bg-coral-900/40 text-coral-500 dark:text-coral-400 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-sm border border-coral-100 dark:border-coral-900/30 flex items-center justify-center cursor-pointer"
                       >

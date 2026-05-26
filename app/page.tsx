@@ -17,6 +17,7 @@ import {
   WalletIcon,
   OceanicFlameLogo
 } from "./components/Icons";
+import { ToastContainer, ConfirmModal, Toast, ConfirmConfig } from "./components/NotificationSystem";
 
 // Types definition
 export interface Transaction {
@@ -70,6 +71,22 @@ export default function Home() {
   const [editTransaction, setEditTransaction] = useState<Transaction | null>(null);
   const [formDefaultDate, setFormDefaultDate] = useState<string | undefined>(undefined);
   const [theme, setTheme] = useState<"light" | "dark">("light");
+  
+  // Custom Premium Toast & Confirm Modal States
+  const [toasts, setToasts] = useState<Toast[]>([]);
+  const [confirmConfig, setConfirmConfig] = useState<ConfirmConfig | null>(null);
+
+  const showToast = (message: string, type: Toast["type"] = "success") => {
+    const id = "toast-" + Math.random().toString(36).substring(2, 9) + Date.now();
+    setToasts((prev) => [...prev, { id, type, message }]);
+    setTimeout(() => {
+      setToasts((prev) => prev.filter((t) => t.id !== id));
+    }, 3500);
+  };
+
+  const showConfirm = (config: ConfirmConfig) => {
+    setConfirmConfig(config);
+  };
 
   // 1. Initial mounting checks (Prevents Hydration Errors)
   useEffect(() => {
@@ -203,6 +220,7 @@ export default function Home() {
         t.id === txData.id ? (txData as Transaction) : t
       );
       saveTransactions(updated);
+      showToast("แก้ไขรายการประวัติเงินเรียบร้อยแล้ว ✨", "success");
     } else {
       // ADD TRANSACTION Mode
       const newTx: Transaction = {
@@ -210,13 +228,24 @@ export default function Home() {
         id: "tx-" + Math.random().toString(36).substring(2, 9) + Date.now().toString(36),
       };
       saveTransactions([newTx, ...transactions]);
+      showToast("บันทึกรายการรายรับ/รายจ่ายสำเร็จ 🎉", "success");
     }
     setEditTransaction(null);
   };
 
   const handleDeleteTransaction = (id: string) => {
-    const filtered = transactions.filter((t) => t.id !== id);
-    saveTransactions(filtered);
+    showConfirm({
+      title: "ยืนยันการลบรายการ 🗑️",
+      message: "คุณแน่ใจหรือไม่ที่จะลบรายการบันทึกนี้?\nข้อมูลนี้จะถูกลบออกถาวรและไม่สามารถเรียกคืนกลับมาได้",
+      confirmText: "ลบรายการ",
+      cancelText: "ยกเลิก",
+      isDanger: true,
+      onConfirm: () => {
+        const filtered = transactions.filter((t) => t.id !== id);
+        saveTransactions(filtered);
+        showToast("ลบรายการประวัติการเงินเรียบร้อยแล้ว", "success");
+      }
+    });
   };
 
   const handleDuplicateTransaction = (tx: Transaction) => {
@@ -227,8 +256,7 @@ export default function Home() {
       date: new Date().toISOString().split("T")[0], // duplicate resets to today
     };
     saveTransactions([duplicatedTx, ...transactions]);
-    // Smooth alert toast
-    alert(`คัดลอกรายการ "${tx.note || tx.categoryLabel}" ไปยังวันที่วันนี้เรียบร้อยแล้ว!`);
+    showToast(`คัดลอกรายการ "${tx.note || tx.categoryLabel}" ไปยังวันนี้เรียบร้อยแล้ว! 📋`, "success");
   };
 
   const handleImportData = (importedTxs: Transaction[], importedBudget: Budget) => {
@@ -345,11 +373,19 @@ export default function Home() {
         {activeTab === "budget" && (
           <BudgetView
             budget={budget}
-            onUpdateBudget={(lim) => saveBudget({ monthlyLimit: lim })}
+            onUpdateBudget={(lim) => {
+              saveBudget({ monthlyLimit: lim });
+              showToast("ตั้งค่าเป้าหมายงบประมาณรายเดือนสำเร็จ! 🎯", "success");
+            }}
             categories={categories}
             transactions={transactions}
-            onImportData={handleImportData}
+            onImportData={(txs, bd) => {
+              handleImportData(txs, bd);
+              showToast("นำเข้าและกู้คืนฐานข้อมูลประวัติรายรับ/จ่ายสำเร็จ! 📂", "success");
+            }}
             onClearAllData={handleClearAllData}
+            showToast={showToast}
+            showConfirm={showConfirm}
           />
         )}
 
@@ -439,6 +475,18 @@ export default function Home() {
         categories={categories}
         editTransaction={editTransaction}
         defaultDate={formDefaultDate}
+      />
+
+      {/* 6. Custom Premium Toast Notification System */}
+      <ToastContainer
+        toasts={toasts}
+        onClose={(id) => setToasts((prev) => prev.filter((t) => t.id !== id))}
+      />
+
+      {/* 7. Custom Premium Frosted Confirm Dialog Modal */}
+      <ConfirmModal
+        config={confirmConfig}
+        onClose={() => setConfirmConfig(null)}
       />
 
     </div>

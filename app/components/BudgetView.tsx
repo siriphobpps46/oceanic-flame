@@ -8,6 +8,7 @@ import {
   AlertCircleIcon, 
   getCategoryIcon 
 } from "./Icons";
+import { ConfirmConfig } from "./NotificationSystem";
 
 interface BudgetViewProps {
   budget: Budget;
@@ -16,6 +17,8 @@ interface BudgetViewProps {
   transactions: Transaction[];
   onImportData: (transactions: Transaction[], budget: Budget) => void;
   onClearAllData: () => void;
+  showToast: (message: string, type?: "success" | "error" | "info" | "warning") => void;
+  showConfirm: (config: ConfirmConfig) => void;
 }
 
 export default function BudgetView({
@@ -25,6 +28,8 @@ export default function BudgetView({
   transactions,
   onImportData,
   onClearAllData,
+  showToast,
+  showConfirm,
 }: BudgetViewProps) {
   const [budgetLimit, setBudgetLimit] = useState(budget.monthlyLimit.toString());
   const [isSaved, setIsSaved] = useState(false);
@@ -54,8 +59,9 @@ export default function BudgetView({
       linkElement.setAttribute('href', dataUri);
       linkElement.setAttribute('download', exportFileDefaultName);
       linkElement.click();
+      showToast("ส่งออกข้อมูลกู้คืนรูปแบบ JSON สำเร็จแล้ว 💾", "success");
     } catch (err) {
-      alert("ไม่สามารถสำรองข้อมูลรูปแบบ JSON ได้ในขณะนี้");
+      showToast("ไม่สามารถสำรองข้อมูลรูปแบบ JSON ได้ในขณะนี้", "error");
     }
   };
 
@@ -88,8 +94,9 @@ export default function BudgetView({
       
       // Cleanup
       setTimeout(() => URL.revokeObjectURL(url), 100);
+      showToast("ส่งออกรายงาน CSV (Excel) สำเร็จแล้ว 📊", "success");
     } catch (err) {
-      alert("ไม่สามารถสำรองข้อมูลรูปแบบ CSV ได้ในขณะนี้");
+      showToast("ไม่สามารถสำรองข้อมูลรูปแบบ CSV ได้ในขณะนี้", "error");
     }
   };
 
@@ -267,8 +274,8 @@ export default function BudgetView({
                   {getCategoryIcon(cat.icon, { size: 14 })}
                 </div>
                 <div className="flex flex-col truncate">
-                  <span className="text-xs font-bold text-slate-700 dark:text-navy-300 truncate">{cat.label}</span>
-                  <span className="text-[8px] font-bold text-slate-400 dark:text-navy-500 uppercase leading-none mt-0.5">
+                  <span className="text-sm font-bold text-slate-700 dark:text-navy-300 truncate">{cat.label}</span>
+                  <span className="text-[10px] font-bold text-slate-400 dark:text-navy-500 uppercase leading-none mt-0.5">
                     {cat.type === "income" ? "รายรับ" : "รายจ่าย"}
                   </span>
                 </div>
@@ -286,17 +293,20 @@ export default function BudgetView({
 
           <button
             onClick={() => {
-              if (
-                confirm(
-                  "🚨 คำเตือนขั้นเด็ดขาด! การดำเนินการนี้จะลบรายการรายรับรายจ่ายทั้งหมด รวมถึงงบประมาณที่เคยตั้งค่าไว้ในเครื่องนี้อย่างถาวรและไม่สามารถเรียกคืนได้\n\nคุณแน่ใจว่าต้องการล้างข้อมูลทั้งหมดจริงหรือไม่?"
-                )
-              ) {
-                onClearAllData();
-                setBudgetLimit("0");
-                alert("ล้างระบบและข้อมูลทั้งหมดบน localStorage ของเครื่องเรียบร้อยแล้ว");
-              }
+              showConfirm({
+                title: "🚨 ยืนยันการล้างข้อมูลทั้งหมด",
+                message: "การดำเนินการนี้จะลบรายการรายรับรายจ่ายทั้งหมด รวมถึงงบประมาณที่เคยตั้งค่าไว้ในเครื่องนี้อย่างถาวรและไม่สามารถเรียกคืนได้\n\nคุณแน่ใจว่าต้องการล้างข้อมูลทั้งหมดจริงหรือไม่?",
+                confirmText: "ล้างข้อมูลทั้งหมด",
+                cancelText: "ยกเลิก",
+                isDanger: true,
+                onConfirm: () => {
+                  onClearAllData();
+                  setBudgetLimit("0");
+                  showToast("ล้างระบบและข้อมูลทั้งหมดเรียบร้อยแล้ว", "success");
+                }
+              });
             }}
-            className="py-3.5 px-4 bg-coral-50 dark:bg-coral-950/20 hover:bg-coral-500 hover:text-white border border-coral-200 dark:border-coral-900/50 text-coral-600 dark:text-coral-400 font-extrabold rounded-2xl text-xs transition-all flex items-center justify-center gap-1.5 shadow-sm"
+            className="py-3.5 px-4 bg-coral-50 dark:bg-coral-950/20 hover:bg-coral-500 hover:text-white border border-coral-200 dark:border-coral-900/50 text-coral-600 dark:text-coral-400 font-extrabold rounded-2xl text-xs transition-all flex items-center justify-center gap-1.5 shadow-sm cursor-pointer"
           >
             <TrashIcon size={14} />
             ล้างข้อมูลในเครื่องทั้งหมด
