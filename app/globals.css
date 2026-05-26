@@ -119,3 +119,17 @@ body {
   animation: fadeIn 0.25s ease-out forwards;
 }
 
+/* Fix iOS Safari native date input stretch/overflow and rendering alignment */
+input[type="date"] {
+  -webkit-appearance: none;
+  appearance: none;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* Ensures consistent height and alignment on iOS WebKit date pickers */
+input[type="date"]::-webkit-date-and-time-value {
+  min-height: 1.5em;
+  text-align: left;
+}
+
