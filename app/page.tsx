@@ -415,7 +415,7 @@ export default function Home() {
           className={`flex flex-col items-center gap-1 py-1.5 px-3 rounded-2xl transition-all ${
             activeTab === "dashboard"
               ? "text-coral-500 font-bold"
-              : "text-slate-400 dark:text-navy-500 hover:text-slate-600 dark:hover:text-navy-300"
+              : "text-slate-400 dark:text-navy-400 hover:text-slate-600 dark:hover:text-navy-300"
           }`}
         >
           <DashboardIcon size={20} className={activeTab === "dashboard" ? "stroke-[2.5]" : ""} />
@@ -428,7 +428,7 @@ export default function Home() {
           className={`flex flex-col items-center gap-1 py-1.5 px-3 rounded-2xl transition-all ${
             activeTab === "history"
               ? "text-coral-500 font-bold"
-              : "text-slate-400 dark:text-navy-500 hover:text-slate-600 dark:hover:text-navy-300"
+              : "text-slate-400 dark:text-navy-400 hover:text-slate-600 dark:hover:text-navy-300"
           }`}
         >
           <HistoryIcon size={20} className={activeTab === "history" ? "stroke-[2.5]" : ""} />
@@ -441,7 +441,7 @@ export default function Home() {
           className={`flex flex-col items-center gap-1 py-1.5 px-3 rounded-2xl transition-all ${
             activeTab === "calendar"
               ? "text-coral-500 font-bold"
-              : "text-slate-400 dark:text-navy-500 hover:text-slate-600 dark:hover:text-navy-300"
+              : "text-slate-400 dark:text-navy-400 hover:text-slate-600 dark:hover:text-navy-300"
           }`}
         >
           <CalendarIcon size={20} className={activeTab === "calendar" ? "stroke-[2.5]" : ""} />
@@ -454,7 +454,7 @@ export default function Home() {
           className={`flex flex-col items-center gap-1 py-1.5 px-3 rounded-2xl transition-all ${
             activeTab === "budget"
               ? "text-coral-500 font-bold"
-              : "text-slate-400 dark:text-navy-500 hover:text-slate-600 dark:hover:text-navy-300"
+              : "text-slate-400 dark:text-navy-400 hover:text-slate-600 dark:hover:text-navy-300"
           }`}
         >
           <BudgetIcon size={20} className={activeTab === "budget" ? "stroke-[2.5]" : ""} />
