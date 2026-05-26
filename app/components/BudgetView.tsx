@@ -202,17 +202,17 @@ export default function BudgetView({
           </div>
 
           {/* Export Actions */}
-          <div className="grid grid-cols-2 gap-3 mt-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-1">
             <button
               onClick={handleExportJSON}
-              className="py-3 px-3 border border-slate-100 dark:border-navy-800 bg-slate-50 dark:bg-navy-950 hover:bg-slate-100 dark:hover:bg-navy-900 rounded-2xl text-xs font-bold text-slate-700 dark:text-navy-200 transition-colors flex items-center justify-center gap-1.5"
+              className="py-3 px-3 border border-slate-100 dark:border-navy-800 bg-slate-50 dark:bg-navy-950 hover:bg-slate-100 dark:hover:bg-navy-900 rounded-2xl text-xs font-bold text-slate-700 dark:text-navy-200 transition-colors flex items-center justify-center gap-1.5 w-full"
             >
               <ExportIcon size={14} />
               ส่งออก JSON (สำรอง)
             </button>
             <button
               onClick={handleExportCSV}
-              className="py-3 px-3 border border-slate-100 dark:border-navy-800 bg-slate-50 dark:bg-navy-950 hover:bg-slate-100 dark:hover:bg-navy-900 rounded-2xl text-xs font-bold text-slate-700 dark:text-navy-200 transition-colors flex items-center justify-center gap-1.5"
+              className="py-3 px-3 border border-slate-100 dark:border-navy-800 bg-slate-50 dark:bg-navy-950 hover:bg-slate-100 dark:hover:bg-navy-900 rounded-2xl text-xs font-bold text-slate-700 dark:text-navy-200 transition-colors flex items-center justify-center gap-1.5 w-full"
             >
               <ExportIcon size={14} />
               ส่งออก CSV (Excel)

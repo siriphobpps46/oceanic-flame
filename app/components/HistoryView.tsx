@@ -198,7 +198,7 @@ export default function HistoryView({
 
             {/* Custom Date Inputs (Conditional) */}
             {dateFilter === "custom" && (
-              <div className="sm:col-span-3 grid grid-cols-2 gap-3 p-3 bg-slate-50 dark:bg-navy-950/50 rounded-2xl border border-slate-100 dark:border-navy-800/30 animate-fade-in">
+              <div className="sm:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 bg-slate-50 dark:bg-navy-950/50 rounded-2xl border border-slate-100 dark:border-navy-800/30 animate-fade-in">
                 <div className="flex flex-col gap-1">
                   <label className="text-[9px] font-bold uppercase text-slate-400 dark:text-navy-500">เริ่มต้นวันที่</label>
                   <input
