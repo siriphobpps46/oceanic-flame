@@ -76,6 +76,10 @@ export default function Home() {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [confirmConfig, setConfirmConfig] = useState<ConfirmConfig | null>(null);
 
+  // Beautiful Emulated Loading Splash Screen States
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadingProgress, setLoadingProgress] = useState(0);
+
   const showToast = (message: string, type: Toast["type"] = "success") => {
     const id = "toast-" + Math.random().toString(36).substring(2, 9) + Date.now();
     setToasts((prev) => [...prev, { id, type, message }]);
@@ -184,7 +188,22 @@ export default function Home() {
     };
 
     window.addEventListener("change-tab", handleTabChange);
+
+    // Premium startup loading progress emulation
+    let currentProgress = 0;
+    const interval = setInterval(() => {
+      currentProgress += 1;
+      setLoadingProgress(currentProgress);
+      if (currentProgress >= 100) {
+        clearInterval(interval);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 250); // short delay for visual completion smoothness
+      }
+    }, 16); // 16ms * 100 = 1600ms total boot time!
+
     return () => {
+      clearInterval(interval);
       window.removeEventListener("change-tab", handleTabChange);
     };
   }, []);
@@ -274,17 +293,72 @@ export default function Home() {
     setIsFormOpen(true);
   };
 
-  if (!isMounted) {
+  const loadingStatusText = () => {
+    if (loadingProgress < 25) return "กำลังปรับตั้งระบบความปลอดภัย...";
+    if (loadingProgress < 50) return "ซิงโครไนซ์ประวัติการเงิน...";
+    if (loadingProgress < 75) return "วิเคราะห์แนวโน้มรายรับรายจ่าย...";
+    if (loadingProgress < 95) return "เตรียมพื้นที่หน้าต่างส่วนตัว...";
+    return "กำลังเปิดระบบ... ยินดีต้อนรับ!";
+  };
+
+  if (!isMounted || isLoading) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center bg-slate-50 dark:bg-navy-950 min-h-screen text-slate-400 font-sans">
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-14 h-14 flex items-center justify-center animate-bounce">
-            <img src="/logo.png" alt="Oceanic Flame Logo" className="w-full h-full object-contain rounded-2xl shadow-lg border border-slate-100 dark:border-navy-800" />
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-slate-50 dark:bg-navy-950 font-sans transition-all duration-500 select-none">
+        
+        {/* Brand Background Glow */}
+        <div className="absolute w-[300px] h-[300px] bg-coral-500/10 dark:bg-coral-500/5 rounded-full blur-[80px] pointer-events-none" />
+
+        {/* Startup Card Box */}
+        <div className="flex flex-col items-center gap-6 max-w-xs w-full text-center z-10 px-4">
+          
+          {/* Logo container with elastic pulse/scale spin */}
+          <div className="w-20 h-20 flex items-center justify-center relative animate-pulse duration-[2000ms]">
+            <img 
+              src="/logo.png" 
+              alt="Oceanic Flame Brand Logo" 
+              className="w-full h-full object-contain rounded-3xl shadow-xl shadow-coral-500/10 dark:shadow-coral-500/5 border border-slate-100/50 dark:border-navy-800 animate-scale-up animate-pulse" 
+            />
+            {/* Pulsing ring around logo */}
+            <span className="absolute -inset-2 rounded-3xl border border-coral-500/20 animate-ping opacity-30 pointer-events-none" />
           </div>
-          <span className="text-sm font-semibold tracking-wide animate-pulse text-navy-800 dark:text-navy-300">
-            กำลังเตรียมระบบ Oceanic Flame...
-          </span>
+
+          {/* Titles */}
+          <div className="flex flex-col gap-1 mt-2">
+            <h2 className="text-xl font-black text-navy-950 dark:text-white tracking-tight">
+              Oceanic Flame
+            </h2>
+            <p className="text-[10px] text-slate-400 dark:text-navy-400 font-extrabold tracking-widest uppercase">
+              บันทึกรายรับรายจ่ายส่วนตัว
+            </p>
+          </div>
+
+          {/* Loader bar container */}
+          <div className="w-full mt-4 flex flex-col items-center gap-2">
+            
+            {/* Outer Progress bar */}
+            <div className="w-full h-1.5 bg-slate-200 dark:bg-navy-900 rounded-full overflow-hidden border border-slate-100 dark:border-navy-800/40">
+              {/* Inner progress bar */}
+              <div 
+                className="h-full bg-gradient-to-r from-coral-500 to-coral-400 rounded-full transition-all duration-75 ease-out shadow-sm shadow-coral-500/20"
+                style={{ width: `${loadingProgress}%` }}
+              />
+            </div>
+
+            {/* Dynamic Status Indicator */}
+            <div className="flex justify-between items-center w-full text-[10px] font-bold text-slate-400 dark:text-navy-400 px-1 mt-1">
+              <span className="animate-pulse">{loadingStatusText()}</span>
+              <span className="text-coral-500 dark:text-coral-400">{loadingProgress}%</span>
+            </div>
+
+          </div>
+
         </div>
+
+        {/* Small version copyright footer */}
+        <div className="absolute bottom-8 text-[9px] text-slate-400 dark:text-navy-500 font-bold uppercase tracking-widest pointer-events-none">
+          PREMIUM FINANCE APP • BY DEEPMIND
+        </div>
+
       </div>
     );
   }
